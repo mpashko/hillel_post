@@ -23,7 +23,9 @@ class someUglyClass(models.Model):
     text = models.TextField()
 
     def Method_A(self):
-        return os.environ.get('a')
+        pass
+        # return os.environ.get('a')
 
     def method_b(self):
-        return sys.argv
+        pass
+        # return sys.argv
