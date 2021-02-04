@@ -12,9 +12,9 @@ class Article(models.Model):
     published = models.DateTimeField(default=timezone.now)
 
 
-class Group(models.Model):
-    group_id = models.AutoField(primary_key=True)
-    articles = models.ManyToManyField(Article)
+class Section(models.Model):
+    section_id = models.AutoField(primary_key=True)
+    articles = models.ManyToManyField(Article, blank=True)
 
 
 
