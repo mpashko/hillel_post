@@ -18,11 +18,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Article',
             fields=[
-                ('article_id', models.AutoField(primary_key=True, serialize=False)),
+                ('article_id', models.AutoField(primary_key=True,
+                                                serialize=False)),
                 ('title', models.CharField(max_length=100)),
                 ('body', models.TextField()),
-                ('published', models.DateTimeField(default=django.utils.timezone.now)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('published', models.DateTimeField(
+                    default=django.utils.timezone.now)),
+                ('author', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
