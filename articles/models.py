@@ -1,3 +1,5 @@
+
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -10,6 +12,12 @@ class Article(models.Model):
     text = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     published = models.DateTimeField(default=timezone.now)
+
+    def __get_value(self):
+        pass
+
+    def get_main(self):
+        self._get_value()
 
 
 class Section(models.Model):
