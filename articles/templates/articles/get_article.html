@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> {{article.title}} </title>
+</head>
+<body>
+    <p>
+        <a href="/articles/"><< Home</a>
+    </p>
+    <div>
+        <h1>{{ article.title }}</h1>
+        <p>Published: {{ article.published }}. Written by: {{ article.author }}</p>
+        {{ article.text|linebreaks }}
+    </div>
+
+    {% for comment in comments %}
+    <div>
+        <p>{{ comment.username }} ({{ comment.created }})</p>
+        {{ comment.body|linebreaks }}
+    </div>
+    {% empty %}
+        <p>There are no comments yet.</p>
+    {% endfor %}
+
+    {% if new_comment %}
+        <b> Your comment has been added.</b>
+    {% else %}
+        <form method="post">
+            <!-- django.forms.forms.BaseForm.as_p -->
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <p><input type='submit' value='Add comment'></p>
+        </form>
+    {% endif %}
+
+</body>
+</html>

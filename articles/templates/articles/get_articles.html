@@ -7,9 +7,16 @@
 <body>
     {% for article in articles %}
         <div>
-            <h1>{{ article.title }}</h1>
-            <p>Published: {{ article.published }}. Written by: {{ article.author }}</p>
-            <p>{{ article.text|linebreaksbr }}</p>
+            <h1>
+                <a href="/articles/{{ article.article_id }}/"> {{ article.title }}</a>
+            </h1>
+            {% with article.comments.count as total_comments %}
+                <i>
+                    Published: {{ article.published }}. Written by: {{ article.author }}. <br>
+                    {{ total_comments }} comment{{ total_comments|pluralize }}
+                </i>
+            {% endwith %}
+
         </div>
     {% endfor %}
 </body>
