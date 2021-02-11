@@ -7,8 +7,7 @@ class Article(models.Model):
     article_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     text = models.TextField()
-    author = models.ForeignKey(settings.AUTH_USER_MODEL,
-                               on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     published = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -21,8 +20,7 @@ class Section(models.Model):
 
 
 class Comment(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE,
-                                related_name='comments')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
     username = models.CharField(max_length=50)
     email = models.EmailField()
     body = models.TextField()

@@ -1,6 +1,9 @@
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.utils import timezone
 
-from .forms import CommentForm
+from .forms import ArticleForm, CommentForm
 from .models import Article
 
 
@@ -30,3 +33,19 @@ def get_article(request, article_id):
     }
 
     return render(request, 'articles/get_article.html', context)
+
+
+def edit_article(request, article_id):
+    article = get_object_or_404(Article, article_id=article_id)
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.author = request.user
+            article.published = timezone.now()
+            article.save()
+            # return HttpResponseRedirect(reverse('get_article', args=[article_id]))
+            return redirect('get_article', article_id=article_id)
+
+    form = ArticleForm(instance=article)
+    return render(request, 'articles/edit_article.html', {'form': form})

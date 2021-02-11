@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Hillel Post{% endblock %}</title>
+</head>
+<body>
+    {% if request.path != '/articles/' %}
+        <a href="{% url 'get_articles' %}"><button>Go Home</button></a>
+    {% endif %}
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
