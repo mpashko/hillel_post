@@ -1,15 +1,12 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
 from django.utils import timezone
 
 from .forms import ArticleForm, CommentForm
-from .models import Article
+from .models import Article, Comment
 
 
 def get_articles(request):
     articles = Article.objects.all().order_by('-published')
-    print(articles)
     return render(request, 'articles/get_articles.html', {'articles': articles})
 
 
@@ -29,7 +26,7 @@ def get_article(request, article_id):
         'article': article,
         'comments': comments,
         'comment_form': CommentForm(),
-        'new_comment': new_comment
+        'new_comment': new_comment and Comment.objects.get(id=new_comment.id)
     }
 
     return render(request, 'articles/get_article.html', context)

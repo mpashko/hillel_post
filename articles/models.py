@@ -20,6 +20,7 @@ class Section(models.Model):
 
 
 class Comment(models.Model):
+    id = models.AutoField(primary_key=True)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
     username = models.CharField(max_length=50)
     email = models.EmailField()
@@ -32,3 +33,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.username} on {self.article}'
+
+
+class SuspiciousComment(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.comment.body

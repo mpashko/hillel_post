@@ -28,8 +28,10 @@
         <p>There are no comments yet.</p>
     {% endfor %}
 
-    {% if new_comment %}
-        <b> Your comment has been added.</b>
+    {% if new_comment and new_comment.active %}
+        <b>Your comment has been added.</b>
+    {% elif new_comment and not new_comment.active %}
+        <b>Your comment looks suspicious, it will be added after being checked by a moderator.</b>
     {% else %}
         <form method="post">
             <!-- django.forms.forms.BaseForm.as_p -->
