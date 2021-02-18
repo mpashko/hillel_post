@@ -22,9 +22,9 @@ class Section(models.Model):
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
-    username = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
     email = models.EmailField()
-    body = models.TextField()
+    text = models.TextField()
     created = models.DateTimeField(default=timezone.now)
     active = models.BooleanField(default=True)
 
@@ -32,11 +32,11 @@ class Comment(models.Model):
         ordering = ('created',)
 
     def __str__(self):
-        return f'Comment by {self.username} on {self.article}'
+        return f'Comment by {self.name} on {self.article}'
 
 
 class SuspiciousComment(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.comment.body
+        return self.comment.text

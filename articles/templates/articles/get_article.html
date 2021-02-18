@@ -21,8 +21,8 @@
 
     {% for comment in comments %}
         <div>
-            <p>{{ comment.username }} ({{ comment.created }})</p>
-            {{ comment.body|linebreaks }}
+            <p>{{ comment.name }} ({{ comment.created }})</p>
+            {{ comment.text|linebreaks }}
         </div>
     {% empty %}
         <p>There are no comments yet.</p>
