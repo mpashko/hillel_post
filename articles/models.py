@@ -13,6 +13,16 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def author_email(self):
+        return self.author.email
+
+    def to_dict(self):
+        return {
+            'title': self.title,
+            'author_email': self.author_email
+        }
+
 
 class Section(models.Model):
     section_id = models.AutoField(primary_key=True)
@@ -33,6 +43,18 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.name} on {self.article}'
+
+    @property
+    def article_author_email(self):
+        return self.article.author_email
+
+    def to_dict(self):
+        return {
+            'article': self.article.to_dict(),
+            'name': self.name,
+            'email': self.email,
+            'text': self.text
+        }
 
 
 class SuspiciousComment(models.Model):

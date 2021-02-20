@@ -21,6 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'iwb&!tbbn0pdz3$fm1o0jqy%jl$4tr#)sdaq^_12zex_)b2w+7'
 
+SENDGRID_KEY = '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'
+EMAIL_SENDER = 'mpashko@pm.me'
+
+CELERY_BROKER_URL = 'amqp://localhost'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
