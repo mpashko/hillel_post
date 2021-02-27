@@ -13,3 +13,10 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
+
+app.conf.beat_schedule = {
+    'get_exchange_rates': {
+        'task': 'exchanger.tasks.get_exchange_rates',
+        'schedule': 30.0
+    }
+}

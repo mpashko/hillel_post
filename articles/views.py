@@ -41,7 +41,6 @@ def edit_article(request, article_id):
             article.author = request.user
             article.published = timezone.now()
             article.save()
-            # return HttpResponseRedirect(reverse('get_article', args=[article_id]))
             return redirect('get_article', article_id=article_id)
 
     form = ArticleForm(instance=article)

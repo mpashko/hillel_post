@@ -15,7 +15,7 @@ class LoggerMiddleware:
         log = LogRecord(
             path=request.path,
             method=request.method,
-            execution_time_sec=diff
+            execution_time_sec=round(diff, 4)
         )
         log.save()
         return response
