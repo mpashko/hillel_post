@@ -5,3 +5,8 @@ body {
 div.header-blue {
   background-color: #014282;
 }
+
+img.cover {
+  width: 40%;
+  height: auto;
+}

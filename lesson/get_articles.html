@@ -8,7 +8,7 @@
 {% block content %}
     {% for article in articles %}
         <div class="card flex-row mt-2 shadow-sm">
-                <img class="card-img-left flex-auto d-none d-lg-block" style="width: 40%; height: auto;" src="{% static 'articles/img.png' %}">
+                <img class="card-img-left flex-auto d-none d-lg-block cover" src="{{ article.cover.url }}">
                 <div class="card-body d-flex flex-column align-items-start">
                         <h3 class="mb-0">
                         <a class="text-dark" href="{% url 'get_article' article_id=article.article_id %}">
@@ -16,7 +16,7 @@
                         </a>
                     </h3>
                     <div class="mb-1 text-muted">by {{ article.author }}, {{ article.published|date:"d.m.y" }}</div>
-                    <p class="card-text mb-auto">{{ article.text|truncatechars:120 }}</p>
+                    <p class="card-text">{{ article.text|truncatechars:120 }}</p>
                     {% with article.comments.count as total_comments %}
                         <p class="text-muted">{{ total_comments }} comment{{  total_comments|pluralize }}</p>
                     {% endwith %}
