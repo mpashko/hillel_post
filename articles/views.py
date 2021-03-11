@@ -1,13 +1,26 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
+from exchanger.models import ExchangeRate
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 
 
 def get_articles(request):
     articles = Article.objects.all().order_by('-published')
-    return render(request, 'articles/get_articles.html', {'articles': articles})
+    exchange_rates = ExchangeRate.objects.all()
+    context = {
+        k: v for ex_rate in exchange_rates
+        for k, v in ex_rate.to_dict().items()
+    }
+
+    # context = {}
+    # for ex_rate in exchange_rates:
+    #     for k, v in ex_rate.to_dict.item():
+    #         context[k] = v
+
+    context['articles'] = articles
+    return render(request, 'articles/get_articles.html', context)
 
 
 def get_article(request, article_id):
