@@ -9,6 +9,7 @@ class Article(models.Model):
     text = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     published = models.DateTimeField(default=timezone.now)
+    cover = models.ImageField(upload_to='covers/', default='covers/default.png')
 
     def __str__(self):
         return self.title

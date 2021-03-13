@@ -1,5 +1,8 @@
+import csv
+
 from django.contrib import admin
 from django.db import models
+from django.http import HttpResponse
 from djrichtextfield.widgets import RichTextWidget
 
 from .models import Article, Comment, Section, SuspiciousComment
@@ -12,6 +15,26 @@ class ArticleAdmin(admin.ModelAdmin):
     }
     list_display = ('article_id', 'title', 'author', 'published')
     list_editable = ('title',)
+    actions = ['export']
+
+    def export(self, request, queryset):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="articles.csv"'
+        writer = csv.writer(response)
+        header = ['Title', 'Author', 'Email', 'Published', 'Comments']
+        writer.writerow(header)
+        for article in queryset:
+            row = [
+                article.title,
+                article.author.get_full_name(),
+                article.author.email,
+                article.published,
+                article.comments.count()
+            ]
+            writer.writerow(row)
+        return response
+
+    export.short_description = 'Export articles'
 
 
 @admin.register(Section)
