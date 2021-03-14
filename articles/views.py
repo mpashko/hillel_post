@@ -1,11 +1,13 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.views.decorators.cache import cache_page
 
 from exchanger.models import ExchangeRate
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 
 
+# @cache_page(60 * 5)
 def get_articles(request):
     articles = Article.objects.all().order_by('-published')
     exchange_rates = ExchangeRate.objects.all()

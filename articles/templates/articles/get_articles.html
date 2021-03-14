@@ -18,10 +18,18 @@
                     </a>
                 </h3>
                 <div class="mb-1 text-muted">by {{ article.author.get_full_name }}, {{ article.published|date:"d.m.y" }} ({{ article.text|get_reading_time:"sec"}})</div>
-                <p class="card-text">{{ article.text|truncatechars:120 }}</p>
-                {% with article.comments.count as total_comments %}
-                    <p class="text-muted">{{ total_comments }} comment{{ total_comments|pluralize }}</p>
-                {% endwith %}
+                <div class="card-text">
+                    {{ article.text|slice:":120" }}<br>
+                    <div class="collapse" id="article-{{ article.article_id }}">
+                        {{ article.text|slice:"120:480" }}
+                    </div>
+                    <a data-bs-toggle="collapse" href="#article-{{ article.article_id }}" aria-controls="article-{{ article.article_id }}">
+                        Read More
+                    </a>
+                    {% with article.comments.count as total_comments %}
+                        <p class="text-muted">{{ total_comments }} comment{{ total_comments|pluralize }}</p>
+                    {% endwith %}
+                </div>
             </div>
         </div>
     {% endfor %}
