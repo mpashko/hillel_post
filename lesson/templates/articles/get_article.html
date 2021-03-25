@@ -1,0 +1,43 @@
+{% extends 'articles/base.html' %}
+
+{% block title %}
+    {{ article.title }}
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>{{ article.title }}</h1>
+        <p>
+            Published: {{ article.published }}.
+            Written by: {{ article.author }}
+            {% if user.is_authenticated %}
+                <a href="{% url 'edit_article' article_id=article.article_id %}">
+                    <button>Edit</button>
+                </a>
+            {% endif %}
+        </p>
+        {{ article.text|linebreaks }}
+    </div>
+
+    {% for comment in comments %}
+        <div>
+            <p>{{ comment.name }} ({{ comment.created }})</p>
+            {{ comment.text|linebreaks }}
+        </div>
+    {% empty %}
+        <p>There are no comments yet.</p>
+    {% endfor %}
+
+    {% if new_comment and new_comment.active %}
+        <b>Your comment has been added.</b>
+    {% elif new_comment and not new_comment.active %}
+        <b>Your comment looks suspicious, it will be added after being checked by a moderator.</b>
+    {% else %}
+        <form method="POST">
+            <!-- django.forms.forms.BaseForm.as_p -->
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <button type="submit">Add comment</button>
+        </form>
+    {% endif %}
+{% endblock %}

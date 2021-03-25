@@ -64,15 +64,11 @@ def edit_article(request, article_id):
             article.author = request.user
             article.published = timezone.now()
             article.save()
-
-            edited = request.session.get('edited')
-            if edited:
-                request.session['edited'].append(article_id)
-            else:
-                request.session['edited'] = [article_id]
-            request.session.modified = True
-
             return redirect('get_article', article_id=article_id)
 
     form = ArticleForm(instance=article)
     return render(request, 'articles/edit_article.html', {'form': form})
+
+
+def get_settings(request):
+    return render(request, 'articles/settings.html')

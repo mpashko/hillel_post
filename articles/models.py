@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from taggit.managers import TaggableManager
 
 
 class Article(models.Model):
@@ -10,6 +11,7 @@ class Article(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     published = models.DateTimeField(default=timezone.now)
     cover = models.ImageField(upload_to='covers/', default='covers/default.png')
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title

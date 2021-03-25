@@ -1,7 +1,6 @@
 <!-- {% now "jS F Y H:i" %} -->
 <!DOCTYPE html>
 {% load static %}
-{% load cache %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,14 +16,13 @@
     </title>
 </head>
 <body>
-
-    {% include 'articles/header.html' %}
+    {% include 'articles/header.html' with user=request.user only %}
 
     <div class="container">
         <div class="row">
 
             <div class="col-1">
-                {% include 'articles/menu.html' %}
+                {% include 'articles/menu.html' with request=request tags=tags only %}
             </div>
 
             <div class="col-8">

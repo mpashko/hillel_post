@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'articles.apps.ArticlesConfig',
     'djrichtextfield',
-    'exchanger'
+    'exchanger',
+    'taggit'
 ]
 
 DJRICHTEXTFIELD_CONFIG = {

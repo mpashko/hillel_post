@@ -19,12 +19,7 @@
                 </h3>
                 <div class="mb-1 text-muted">
                     {% with article.comments.count as total_comments %}
-                        {% if article.article_id in edited %}
-                            &#9999; EDITED
-                        {% else %}
-                            by {{ article.author.get_full_name }}
-                        {% endif %}
-                        | {{ article.text|get_reading_time:"sec"}} | {{ article.published|date:"d.m.y" }} | {{ total_comments }} comment{{ total_comments|pluralize }}
+                        by {{ article.author.get_full_name }} | {{ article.text|get_reading_time:"sec"}} | {{ article.published|date:"d.m.y" }} | {{ total_comments }} comment{{ total_comments|pluralize }}
                     {% endwith %}
                 </div>
                 <div class="card-text">
@@ -32,7 +27,7 @@
                     <div class="collapse" id="article-{{ article.article_id }}">
                         {{ article.text|slice:"120:480" }}
                     </div>
-                    <a data-bs-toggle="collapse" href="#article-{{ article.article_id }}" aria-controls="article-{{ article.article_id }}">
+                    <a class="text-reset" data-bs-toggle="collapse" href="#article-{{ article.article_id }}" aria-controls="article-{{ article.article_id }}">
                         Read More
                     </a>
                     <div style="text-align: right;">

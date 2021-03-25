@@ -29,6 +29,12 @@ a.title {
   font-size: 26px;
 }
 
+a.title-edited {
+  text-decoration: none;
+  color: #388a1b;
+  font-size: 26px;
+}
+
 a.tag {
   text-decoration: none;
 }
