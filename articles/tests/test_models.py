@@ -55,10 +55,10 @@ class ArticlesModelTest(TestCase):
     def test_author_email_is_equal_to_user_email(self):
         article = Article(title=self.title, text=self.text, author=self.user)
         expected_email = self.user.email
-        self.assertEquals(article.author_email, expected_email)
+        self.assertEqual(article.author_email, expected_email)
 
     def test_to_dict_equals_to_short_representation(self):
         article = Article(title=self.title, text=self.text, author=self.user)
         # expected = {'title': self.title, 'author_email': self.user.email}
         expected = {'title': self.title, 'author_email': article.author_email}
-        self.assertEquals(article.to_dict(), expected)
+        self.assertEqual(article.to_dict(), expected)
