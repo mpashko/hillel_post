@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -5,11 +7,33 @@ from django.urls import reverse
 
 from articles.models import Article
 from articles.tests.factory import UserFactory
+from exchanger.models import ExchangeRate
 
 
 class ArticleListViewTest(TestCase):
 
     NUMBER_OF_ARTICLES = 10
+
+    _EXPECTED_RATES = [
+        ExchangeRate(
+            currency_a='USD',
+            currency_b='UAH',
+            buy=25.99,
+            sell=26.12
+        ),
+        ExchangeRate(
+            currency_a='EUR',
+            currency_b='UAH',
+            buy=25.99,
+            sell=26.12
+        ),
+        ExchangeRate(
+            currency_a='RUB',
+            currency_b='UAH',
+            buy=25.99,
+            sell=26.12
+        )
+    ]
 
     @classmethod
     def setUpTestData(cls):
@@ -34,10 +58,19 @@ class ArticleListViewTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'articles/get_articles.html')
 
-    def test_lists_all_articles(self):
+    @patch('articles.views.get_exchange_rates')
+    def test_lists_all_articles(self, mock_request):
+        mock_request.return_value = self._EXPECTED_RATES
         resp = self.client.get(reverse('get_articles'))
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(len(resp.context['articles']) == self.NUMBER_OF_ARTICLES)
+
+    @patch('articles.views.get_exchange_rates')
+    def test_validate_exchange_rate_table(self, mock_request):
+        mock_request.return_value = self._EXPECTED_RATES
+        resp = self.client.get(reverse('get_articles'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.context['xrates']), 6)
 
 
 @pytest.mark.django_db

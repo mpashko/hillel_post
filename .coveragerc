@@ -1,0 +1,11 @@
+[run]
+source = .
+omit =
+    ./venv/*
+    */migrations/*
+    */tests/*
+
+[report]
+fail_under = 70
+show_missing = True
+skip_covered = True

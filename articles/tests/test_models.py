@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from articles.models import Article
+from articles.models import Article, Comment
 
 
 class ArticlesModelTest(TestCase):
@@ -19,6 +19,7 @@ class ArticlesModelTest(TestCase):
             last_name='Doe',
             email='john.doe@gmail.com'
         )
+        cls.article = Article(title=cls.title, text=cls.text, author=cls.user)
 
     def setUp(self) -> None:
         # вызывается перед каждой тестовой функцией для настройки объектов,
@@ -35,8 +36,7 @@ class ArticlesModelTest(TestCase):
     #     self.assertTrue(False)
 
     def test_successful_article_creation(self):
-        article = Article(title=self.title, text=self.text, author=self.user)
-        article.full_clean()
+        self.article.full_clean()
 
     def test_failure_due_to_long_title(self):
         long_title = 'a' * 101
@@ -53,12 +53,47 @@ class ArticlesModelTest(TestCase):
             article.full_clean()
 
     def test_author_email_is_equal_to_user_email(self):
-        article = Article(title=self.title, text=self.text, author=self.user)
         expected_email = self.user.email
-        self.assertEqual(article.author_email, expected_email)
+        self.assertEqual(self.article.author_email, expected_email)
 
     def test_to_dict_equals_to_short_representation(self):
-        article = Article(title=self.title, text=self.text, author=self.user)
         # expected = {'title': self.title, 'author_email': self.user.email}
-        expected = {'title': self.title, 'author_email': article.author_email}
-        self.assertEqual(article.to_dict(), expected)
+        expected = {'title': self.title, 'author_email': self.article.author_email}
+        self.assertEqual(self.article.to_dict(), expected)
+
+    def test_validate_article_representation(self):
+        expected_repr = self.title
+        self.assertEqual(self.article.__str__(), expected_repr)
+
+
+class CommentModelTest(TestCase):
+
+    def setUp(self) -> None:
+        user = User.objects.create(
+            first_name='John',
+            last_name='Doe',
+            email='john.doe@gmail.com'
+        )
+        self.article = Article(
+            title='some title',
+            text='some text',
+            author=user
+        )
+        self.comment = Comment(
+            article=self.article,
+            name='some name',
+            email='some@email.com',
+            text='some text'
+        )
+
+    def test_validate_to_dict_method(self):
+        expected_resp = {
+            'name': self.comment.name,
+            'email': self.comment.email,
+            'text': self.comment.text,
+            'article': {
+                'title': self.article.title,
+                'author_email': self.article.author_email
+            }
+        }
+        self.assertEqual(self.comment.to_dict(), expected_resp)

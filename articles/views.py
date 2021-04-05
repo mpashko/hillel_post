@@ -4,6 +4,7 @@ from django.views.decorators.cache import cache_page
 from taggit.models import Tag
 
 from exchanger.models import ExchangeRate
+from exchanger.tasks import get_exchange_rates
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 
@@ -17,7 +18,8 @@ def get_articles(request, tag_slug=None):
         articles = Article.objects.all().order_by('-published')
 
     exchange_rates = ExchangeRate.objects.all()
-    context = {
+    xrates = {
+        # k: v for ex_rate in get_exchange_rates()
         k: v for ex_rate in exchange_rates
         for k, v in ex_rate.to_dict().items()
     }
@@ -27,6 +29,7 @@ def get_articles(request, tag_slug=None):
     #     for k, v in ex_rate.to_dict.item():
     #         context[k] = v
 
+    context = {'xrates': xrates}
     context['articles'] = articles
     context['edited'] = request.session.get('edited')
     context['tags'] = Tag.objects.all().order_by('name')

@@ -16,3 +16,7 @@ class ExchangeRate(models.Model):
             f'{currency_a}_buy': self.buy,
             f'{currency_a}_sell': self.sell
         }
+
+    def __str__(self):
+        return f'currency_a={self.currency_a}, buy={self.buy}, ' \
+               f'sell={self.sell}'
