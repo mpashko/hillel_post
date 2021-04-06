@@ -32,7 +32,7 @@ EXCHANGE_RATES_SOURCE = 'https://api.monobank.ua/bank/currency'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
