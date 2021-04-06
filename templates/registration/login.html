@@ -18,7 +18,8 @@
               <td>{{ form.password }}</td>
             </tr>
         </table>
-        <input type="submit" value="login" />
+        <input type="submit" value="Login" />
+        <a href="{% url 'signup' %}">Sign Up</a>
     </form>
 
     <p><a href="{% url 'password_reset' %}">Lost password?</a></p>

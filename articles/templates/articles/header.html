@@ -41,7 +41,7 @@
                             h40C512,443.62,485.371,379.333,437.02,330.98z M256,256c-59.551,0-108-48.448-108-108S196.449,40,256,40
                             c59.551,0,108,48.448,108,108S315.551,256,256,256z"/>
                     </svg>
-                    {{ user.get_full_name }}
+                    {{ user.get_full_name|default:user.username }}
                     <a href="{% url 'logout' %}?next=/">
                         <svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 471.2 471.2" style="fill: white; margin-left: 12px;" xml:space="preserve">
                             <path d="M227.619,444.2h-122.9c-33.4,0-60.5-27.2-60.5-60.5V87.5c0-33.4,27.2-60.5,60.5-60.5h124.9c7.5,0,13.5-6,13.5-13.5
