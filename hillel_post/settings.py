@@ -47,8 +47,7 @@ INSTALLED_APPS = [
     'articles.apps.ArticlesConfig',
     'djrichtextfield',
     'exchanger',
-    'taggit',
-    'users'
+    'taggit'
 ]
 
 DJRICHTEXTFIELD_CONFIG = {
@@ -160,5 +159,3 @@ CACHES = {
 }
 
 LOGIN_REDIRECT_URL = '/'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
