@@ -10,9 +10,9 @@ from .models import Article, Comment, Section, SuspiciousComment
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    formfield_overrides = {
-        models.TextField: {'widget': RichTextWidget}
-    }
+    # formfield_overrides = {
+    #     models.TextField: {'widget': RichTextWidget}
+    # }
     list_display = ('article_id', 'title', 'author', 'published')
     list_editable = ('title',)
     actions = ['export']
