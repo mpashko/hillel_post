@@ -34,6 +34,7 @@ packaging==20.9
 Pillow==8.1.2
 pluggy==0.13.1
 prompt-toolkit==3.0.16
+psycopg2==2.8.6
 py==1.10.0
 pycodestyle==2.6.0
 pyflakes==2.2.0
