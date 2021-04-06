@@ -59,6 +59,7 @@ def get_article(request, article_id):
     return render(request, 'articles/get_article.html', context)
 
 
+@login_required
 def edit_article(request, article_id):
     article = get_object_or_404(Article, article_id=article_id)
     if request.method == 'POST':
