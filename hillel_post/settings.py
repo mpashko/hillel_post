@@ -196,3 +196,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+BROKER_POOL_LIMIT = 3
+
+BROKER_URL = 'amqps://bzugxgqp:qXy2JVuoBKwxRvygvE6jrs-9-VKiNvjS@stingray.rmq.cloudamqp.com/bzugxgqp'

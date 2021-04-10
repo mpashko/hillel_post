@@ -9,6 +9,7 @@ from hillel_post.settings import EMAIL_SENDER, SENDGRID_KEY
 
 @shared_task
 def send_email(data):
+    print('>> Sending email')
     context = {
         'title': data['article']['title'],
         'name': data['name'],
