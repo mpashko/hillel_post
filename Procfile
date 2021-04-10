@@ -1,2 +1,2 @@
 web: gunicorn hillel_post.wsgi --log-file -
-worker: python manage.py celery worker -B -l info
+worker: celery -A hillel_post.celery worker -B --log-file -
