@@ -16,7 +16,6 @@ CURRENCY_MAP = {
 
 @shared_task
 def get_exchange_rates():
-    print('>> Requesting exchange rates')
     # resp = requests.get(EXCHANGE_RATES_SOURCE)
     # resp = resp.json()
     print('>> Make request')

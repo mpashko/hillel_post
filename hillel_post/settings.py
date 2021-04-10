@@ -27,6 +27,9 @@ SECRET_KEY = 'iwb&!tbbn0pdz3$fm1o0jqy%jl$4tr#)sdaq^_12zex_)b2w+7'
 SENDGRID_KEY = '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'
 EMAIL_SENDER = 'mpashko@pm.me'
 
+# CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqps://bzugxgqp:qXy2JVuoBKwxRvygvE6jrs-9-VKiNvjS@stingray.rmq.cloudamqp.com/bzugxgqp'
+
 EXCHANGE_RATES_SOURCE = 'https://api.monobank.ua/bank/currency'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -196,7 +199,3 @@ LOGOUT_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 BROKER_POOL_LIMIT = 3
-
-# CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_BROKER_URL = 'amqps://bzugxgqp:qXy2JVuoBKwxRvygvE6jrs-9-VKiNvjS@stingray.rmq.cloudamqp.com/bzugxgqp'
-BROKER_URL = 'amqps://bzugxgqp:qXy2JVuoBKwxRvygvE6jrs-9-VKiNvjS@stingray.rmq.cloudamqp.com/bzugxgqp'
