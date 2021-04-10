@@ -16,6 +16,7 @@ CURRENCY_MAP = {
 
 @shared_task
 def get_exchange_rates():
+    print('>> Requesting exchange rates')
     # resp = requests.get(EXCHANGE_RATES_SOURCE)
     # resp = resp.json()
     print('>> Make request')
@@ -60,7 +61,7 @@ def get_exchange_rates():
     exchange_rates = [get_exchange_rate(d) for d in filter_out_rates(resp)]
     ExchangeRate.objects.all().delete()
     ExchangeRate.objects.bulk_create(exchange_rates)
-    return exchange_rates
+    # return exchange_rates
 
 
 def filter_out_rates(rates):
