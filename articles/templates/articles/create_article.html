@@ -1,0 +1,15 @@
+<!-- templates/articles/create_article.html -->
+{% extends 'articles/base.html' %}
+
+{% block title %}
+    Create article
+{% endblock %}
+
+{% block content %}
+    <h1>New article</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Save"/>
+    </form>
+{% endblock content %}

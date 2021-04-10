@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from taggit.managers import TaggableManager
 
@@ -25,6 +26,9 @@ class Article(models.Model):
             'title': self.title,
             'author_email': self.author_email
         }
+
+    def get_absolute_url(self):
+        return reverse('get_article', kwargs={'article_id': self.article_id})
 
 
 class Section(models.Model):

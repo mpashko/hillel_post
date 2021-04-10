@@ -11,9 +11,14 @@
             Published: {{ article.published }}.
             Written by: {{ article.author }}
             {% if user.is_authenticated %}
-                <a href="{% url 'edit_article' article_id=article.article_id %}">
-                    <button>Edit</button>
-                </a>
+                {% if user.pk == article.author.pk or user.is_staff %}
+                    <a href="{% url 'edit_article' pk=article.article_id %}">
+                        <button>Edit</button>
+                    </a>
+                    <a href="{% url 'delete_article' pk=article.article_id %}">
+                        <button>Delete</button>
+                    </a>
+                {% endif %}
             {% endif %}
         </p>
         {{ article.text|linebreaks }}

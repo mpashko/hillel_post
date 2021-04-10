@@ -1,7 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from taggit.models import Tag
 
 from exchanger.models import ExchangeRate
@@ -81,3 +85,25 @@ def edit_article(request, article_id):
 
     form = ArticleForm(instance=article)
     return render(request, 'articles/edit_article.html', {'form': form})
+
+
+class ArticleCreateView(LoginRequiredMixin, CreateView):
+    model = Article
+    template_name = 'articles/create_article.html'
+    fields = ['title', 'text', 'cover', 'tags']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class ArticleEditView(LoginRequiredMixin, UpdateView):
+    model = Article
+    template_name = 'articles/edit_article.html'
+    fields = ['title', 'text', 'cover', 'tags']
+
+
+class ArticleDeleteView(LoginRequiredMixin, DeleteView):
+    model = Article
+    template_name = 'articles/delete_article.html'
+    success_url = reverse_lazy('index')
