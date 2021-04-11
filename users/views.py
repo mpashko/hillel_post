@@ -23,13 +23,8 @@ def signup(request):
             token = account_activation_token.make_token(user)
 
             pk = user.pk
-            print(f'>> PK: {pk}')
-
             pk_bytes = force_bytes(pk)
-            print(f'>> PK bytes: {pk_bytes}')
-
             user_id = urlsafe_base64_encode(pk_bytes)
-            print(f'>> User ID: {user_id}')
 
             message = render_to_string('users/account_activation_email.html', {
                 'user': user,
