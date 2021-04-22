@@ -2,7 +2,6 @@
 {% load static %}
 {% load articles_extras %}
 
-
 {% block title %}
     Articles
 {% endblock %}
@@ -50,4 +49,8 @@
             </div>
         </div>
     {% endfor %}
+    <br>
+    {% if articles.paginator.num_pages != 1 %}
+        {% include "articles/pagination.html" with page=articles %}
+    {% endif %}
 {% endblock %}

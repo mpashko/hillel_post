@@ -200,3 +200,5 @@ LOGOUT_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 BROKER_POOL_LIMIT = 3
+
+ARTICLES_PER_PAGE = 3

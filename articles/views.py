@@ -10,6 +10,7 @@ from taggit.models import Tag
 
 from exchanger.models import ExchangeRate
 from exchanger.tasks import get_exchange_rates
+from hillel_post.settings import ARTICLES_PER_PAGE
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 
@@ -21,6 +22,15 @@ def get_articles(request, tag_slug=None):
         articles = Article.objects.filter(tags__in=[tag]).order_by('-published')
     else:
         articles = Article.objects.all().order_by('-published')
+
+    paginator = Paginator(articles, ARTICLES_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
 
     exchange_rates = ExchangeRate.objects.all()
     xrates = {
@@ -36,6 +46,7 @@ def get_articles(request, tag_slug=None):
 
     context = {'xrates': xrates}
     context['articles'] = articles
+    context['page'] = page
     context['edited'] = request.session.get('edited')
     context['tags'] = Tag.objects.all().order_by('name')
     return render(request, 'articles/get_articles.html', context)
