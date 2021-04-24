@@ -12,5 +12,7 @@ urlpatterns = [
     path('articles/<int:article_id>/', views.get_article, name='get_article'),
     path('articles/<int:pk>/edit/', ArticleEditView.as_view(), name='edit_article'),
     path('articles/<int:pk>/delete/', ArticleDeleteView.as_view(), name='delete_article'),
-    path('articles/<slug:tag_slug>/', views.get_articles, name='get_articles_by_tag')
+    path('articles/<slug:tag_slug>/', views.get_articles, name='get_articles_by_tag'),
+    path('api/v1/articles/', views.articles),
+    path('api/v1/articles/<int:article_id>', views.article)
 ]

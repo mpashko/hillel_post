@@ -1,11 +1,19 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.decorators import api_view, authentication_classes, \
+    permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, \
+    HTTP_400_BAD_REQUEST
 from taggit.models import Tag
 
 from exchanger.models import ExchangeRate
@@ -13,6 +21,7 @@ from exchanger.tasks import get_exchange_rates
 from hillel_post.settings import ARTICLES_PER_PAGE
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
+from .serializers import ArticleSerializer
 
 
 # @cache_page(60 * 5)
@@ -118,3 +127,55 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     model = Article
     template_name = 'articles/delete_article.html'
     success_url = reverse_lazy('index')
+
+
+@api_view(['GET', 'POST'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def articles(request):
+    if request.method == 'GET':
+        articles = Article.objects.all()
+        serializer = ArticleSerializer(articles, many=True)
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        rdata = request.data
+        data = {
+            'title': rdata.get('title'),
+            'text': rdata.get('text'),
+            'author': request.user.pk,
+        }
+        serializer = ArticleSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'DELETE', 'PUT'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def article(request, article_id):
+    try:
+        article = Article.objects.get(pk=article_id)
+    except Article.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = ArticleSerializer(article)
+        return Response(serializer.data)
+
+    if request.method == 'DELETE':
+        article.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    if request.method == 'PUT':
+        title = request.data.get('title')
+        if title:
+            article.title = title
+        text = request.data.get('text')
+        if text:
+            article.text = text
+        article.save()
+        return Response(status=HTTP_200_OK)
