@@ -1,5 +1,7 @@
+import jwt
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import User
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,15 +12,17 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.decorators import api_view, authentication_classes, \
     permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, \
-    HTTP_400_BAD_REQUEST
+    HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework_jwt.serializers import jwt_payload_handler
 from taggit.models import Tag
 
 from exchanger.models import ExchangeRate
 from exchanger.tasks import get_exchange_rates
-from hillel_post.settings import ARTICLES_PER_PAGE
+from hillel_post.settings import ARTICLES_PER_PAGE, SECRET_KEY
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 from .serializers import ArticleSerializer
@@ -117,10 +121,11 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ArticleEditView(LoginRequiredMixin, UpdateView):
+class ArticleEditView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Article
     template_name = 'articles/edit_article.html'
     fields = ['title', 'text', 'cover', 'tags']
+    permission_required = ['is_staff']
 
 
 class ArticleDeleteView(LoginRequiredMixin, DeleteView):
@@ -130,7 +135,7 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
 
 
 @api_view(['GET', 'POST'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def articles(request):
     if request.method == 'GET':
@@ -179,3 +184,35 @@ def article(request, article_id):
             article.text = text
         article.save()
         return Response(status=HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def authenticate_user(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+    if not email or not password:
+        res = {'error': 'Please provide an email and a password'}
+        return Response(res)
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        message = "Can't find user with the specified email"
+        res = {'error': message}
+        return Response(res, status=HTTP_404_NOT_FOUND)
+
+    if not user.check_password(password):
+        message = "Can't authenticate with the given credentials or the account has " \
+                  "been deactivated"
+        res = {'error': message}
+        return Response(res, status=HTTP_403_FORBIDDEN)
+
+    payload = jwt_payload_handler(user)
+    token = jwt.encode(payload, SECRET_KEY)
+    user_details = {
+        'user_id': user.pk,
+        'name': f'{user.first_name} {user.last_name}',
+        'token': token
+    }
+    return Response(user_details, status=HTTP_200_OK)
