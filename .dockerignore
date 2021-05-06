@@ -5,3 +5,4 @@
 .travis.yml
 venv/
 __pycache__/
+.env

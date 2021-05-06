@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  rabbit:
+    image: rabbitmq:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+    command: rabbitmq-server
+
+  celery:
+    build: .
+    command: celery -A hillel_post worker -B
+    env_file:
+      - ./.env
+    depends_on:
+      - rabbit
+
+  app:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - celery

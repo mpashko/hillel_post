@@ -24,8 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'iwb&!tbbn0pdz3$fm1o0jqy%jl$4tr#)sdaq^_12zex_)b2w+7'
+# SECRET_KEY = os.environ.get('SECRET_KEY')
 
-SENDGRID_KEY = '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'
+
+# SENDGRID_KEY = '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'
+SENDGRID_KEY = os.environ.get('SENDGRID_KEY')
 EMAIL_SENDER = 'mpashko@pm.me'
 
 # CELERY_BROKER_URL = 'amqp://localhost'
@@ -131,15 +134,26 @@ WSGI_APPLICATION = 'hillel_post.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+#
+# db_from_env = dj_database_url.config()
+# DATABASES['default'].update(db_from_env)
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432
     }
 }
-
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
 
 
 # Password validation

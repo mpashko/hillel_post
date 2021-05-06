@@ -17,6 +17,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'get_exchange_rates': {
         'task': 'exchanger.tasks.get_exchange_rates',
-        'schedule': 30.0
+        'schedule': 10.0
     }
 }
